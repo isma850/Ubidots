@@ -1,0 +1,17 @@
+import time
+from ubidots import ApiClient
+
+api_client = ApiClient('BBFF-4ef8d8bb321b5e7822ae830d8cb26da9a21')
+
+sensor = api_client.get_variable('64e74e8e134fb0000ccd66eb')
+motion_sensor_pin = 'PIN_MOTION_SENSOR'
+
+import RPi.GPIO as GPIO
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(motion_sensor_pin, GPIO.IN)
+
+while True:
+    motion_detected = GPIO.input(motion_sensor_pin)
+    sensor.save_value({'value': motion_detected})
+   
+    time.sleep(10)
